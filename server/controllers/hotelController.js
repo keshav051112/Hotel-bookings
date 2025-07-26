@@ -1,7 +1,5 @@
 import Hotel from "../models/Hotel.js";
-<<<<<<< HEAD
 import User from "../models/user.js";
-
 export const registerHotel = async (req, res) => {
   try {
     const { name, address, contact, city } = req.body;
@@ -30,28 +28,4 @@ export const registerHotel = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
-=======
-import User from "../models/user.js"
 
-export const registerHotel = async(req ,res)=>{
-    try {
-        const {name,address,contact,city} = req.body;
-        const owner = req.user._id;
-        
-       const hotel = await Hotel.findOne({owner})
-
-       if(hotel){
-        return res.json({success: false, meassage:"hotel Already Register"})
-       }
-
-       await Hotel.create({name,address,contact,city,owner});
-
-       await User.findByIdAndUpdate(owner,{role:"hotelOwner"})
-
-       res.json({success:true, message:"hotel register successfully"})
-
-    } catch (error) {
-        res.json({success:false, message:error.message})
-    }
-}
->>>>>>> origin/main
