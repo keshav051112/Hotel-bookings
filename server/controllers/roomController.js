@@ -52,18 +52,20 @@ export const getRoom = async(req,res)=>{
       res.json({success:false ,message:error.message})
    }
 }
-export const getOwnerRoom = async(req,res)=>{
-     try {
+export const getOwnerRoom = async (req, res) => {
+  try {
+    const hotelData = await Hotel.findOne({ owner: req.auth.userId });
+    const rooms = await Room.find({ hotel: hotelData._id.toString() }).populate("hotel");
 
-       const { userId } = await req.auth(); // ✅ FIX
-       const hotelData = await Hotel.findOne({ owner: userId });
+    return res.json({ success: true, rooms });  // ✅ Use rooms
+  } catch (error) {
+    console.error("getOwnerRoom error:", error);
+    return res.json({ success: false, message: error.message });
+  }
+};
 
-       const room = await Room.find({hotel:hotelData._id.toString()}).populate("hotel")
-       res.json({success:true ,room})
-     } catch (error) {
-      res.json({success:false , message:error.message})
-     }
-}
+
+
 export const toggleRoomAvalibility= async(req,res)=>{
    try {
       const {roomId} = req.body;

@@ -8,39 +8,48 @@ const ListRoom = () => {
   const { axios, getToken, user } = useAppContext();
 
   const fetchRooms = async () => {
+  try {
+    const { data } = await axios.get('/api/rooms/owner', {
+      headers: { Authorization: `Bearer ${await getToken()}` }
+    });
+    console.log('API Response:', data);  
+    if (data.success) {
+      setRooms(data.rooms);  
+    } else {
+      toast.error(data.message);
+    }
+  } catch (error) {
+    toast.error(error.response?.data?.message || error.message || 'Something went wrong');
+  }
+};
+
+
+  // Toggle availability handler
+  const toggleHandler = async (roomId) => {
     try {
-      const { data } = await axios.get('/api/rooms/owner', {
-        headers: { Authorization: `Bearer ${await getToken()}` }
-      });
+      const { data } = await axios.post(
+        '/api/rooms/toggle-availability', // ✅ Fixed spelling
+        { roomId },
+        {
+          headers: { Authorization: `Bearer ${await getToken()}` },
+        }
+      );
+
       if (data.success) {
-        setRooms(data.room); // use correct key
+        toast.success(data.message);
+        fetchRooms(); // Refresh room list
       } else {
         toast.error(data.message);
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || error.message || 'Something went wrong');
+      toast.error(
+        error.response?.data?.message ||
+          error.message ||
+          'Something went wrong while toggling availability'
+      );
     }
   };
 
-
-  const toggleHandler = async(roomId) =>{
-    try{
-     const {data} = await axios.post('/api/rooms/toggle-avalibility' , {roomId}, {
-        headers: { Authorization: `Bearer ${await getToken()}` },
-      })
-
-      if(data.success){
-        toast.success(data.message)
-        fetchRooms()
-        
-      }else{
-        toast.error(data.message)
-      }
-
-  }catch(error){
-    toast.error(error.response?.data?.message || error.message || 'Something went wrong')
-  }
-  }
   useEffect(() => {
     if (user) {
       fetchRooms();
@@ -65,7 +74,9 @@ const ListRoom = () => {
               <tr>
                 <th className="py-3 px-4 text-gray-800 font-medium text-left">Sr No</th>
                 <th className="text-left py-3 px-5 text-gray-700 font-semibold">Room Type</th>
-                <th className="text-left py-3 px-5 text-gray-700 font-semibold max-sm:hidden">Amenities</th>
+                <th className="text-left py-3 px-5 text-gray-700 font-semibold max-sm:hidden">
+                  Amenities
+                </th>
                 <th className="text-center py-3 px-5 text-gray-700 font-semibold">Price / Night</th>
                 <th className="text-center py-3 px-5 text-gray-700 font-semibold">Available</th>
               </tr>
@@ -85,27 +96,26 @@ const ListRoom = () => {
                         {index + 1}
                       </td>
                       <td className="py-3 px-5 text-gray-800">
-                        {item.roomType || "N/A"}
+                        {item.roomType || 'N/A'}
                       </td>
                       <td className="py-3 px-5 text-gray-600 max-sm:hidden">
                         {Array.isArray(item.amenities)
-                          ? item.amenities.join(", ")
-                          : "N/A"}
+                          ? item.amenities.join(', ')
+                          : 'N/A'}
                       </td>
                       <td className="py-3 px-5 text-center text-gray-800">
-                        ${item.pricePerNight || "N/A"}
+                        ${item.pricePerNight || 'N/A'}
                       </td>
                       <td className="py-3 px-5 text-center">
-                        <label className='relative inline-flex items-center cursor-pointer text-gray-900 gap-3'>
+                        <label className="relative inline-flex items-center cursor-pointer text-gray-900 gap-3">
                           <input
                             type="checkbox"
                             className="sr-only peer"
-                            checked={item.isAvailable}
-                            onChange={()=>toggleHandler(item._id)}
+                            checked={!!item.isAvailable} // ✅ Fallback to avoid undefined
+                            onChange={() => toggleHandler(item._id)}
                           />
-                              <div className='w-12 h-7 bg-slate-300 rounded-full peer peer-checked:bg-blue-600 transition-colors duration-200'> </div>
-                <span className='dot absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-5'></span>
-             
+                          <div className="w-12 h-7 bg-slate-300 rounded-full peer peer-checked:bg-blue-600 transition-colors duration-200"></div>
+                          <span className="dot absolute left-1 top-1 w-5 h-5 bg-white rounded-full transition-transform duration-200 ease-in-out peer-checked:translate-x-5"></span>
                         </label>
                       </td>
                     </tr>
@@ -113,7 +123,7 @@ const ListRoom = () => {
                 })
               ) : (
                 <tr>
-                  <td colSpan="4" className="text-center py-6 text-gray-400">
+                  <td colSpan="5" className="text-center py-6 text-gray-400">
                     No rooms found.
                   </td>
                 </tr>
