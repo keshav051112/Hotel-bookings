@@ -38,27 +38,27 @@ const AppContextProvider = ({children})=>{
         }
     }
 
-    const fetchUser = async()=>{
-        try {
-        const res =  await axios.get('/api/user', {headers:{Authorization: `Bearer ${await getToken()}`
-        
-}})
-       const data = res.data;
-        if(data.success){
-           setIsOwner(data.role === "hotelOwner")
-           setSearchCities(data.recentSearchedCities)
+    const fetchUser = async () => {
+  try {
+    const token = await getToken();
+    console.log("Token from Clerk:", token);
+    const res = await axios.get('/api/user', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
 
-        }else{
-            //retry fetching user details 
-            setTimeout(()=>{
-                fetchUser()
-            },5000)
-        }
-
-        } catch (error) {
-            toast.error(error.message)
-        }
+    const data = res.data;
+    if (data.success) {
+      setIsOwner(data.role === "hotelOwner");
+      setSearchCities(data.recentSearchedCities);
+    } else {
+      setTimeout(fetchUser, 5000);
     }
+  } catch (error) {
+    toast.error(error.message);
+    console.error("fetchUser error:", error);
+  }
+};
+
 
     useEffect(()=>{
      if(user){
