@@ -1,0 +1,19 @@
+<svg width="280" height="80" viewBox="0 0 280 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Transparent canvas -->
+  <rect width="80" height="80" rx="16" fill="transparent" />
+
+  <!-- White rounded border around icon group (building + pin) -->
+  <rect x="16" y="16" width="48" height="48" rx="12" fill="none" stroke="#FFFFFF" stroke-width="2" />
+
+  <!-- Icon (hotel bars) -->
+  <path d="M26 24h28v6H26v-6zm0 9h28v6H26v-6zm0 9h16v6H26v-6z" fill="#FFFFFF"/>
+  
+  <!-- Pin circle -->
+  <circle cx="60" cy="60" r="6" fill="#FFFFFF" />
+  <path d="M59 59v2.5h2.5V59H59z" fill="#FFFFFF" />
+
+  <!-- Brand Text -->
+  <text x="90" y="52" font-family="Verdana, sans-serif" font-size="30" font-weight="bold" fill="#FFFFFF">
+    HotelStay
+  </text>
+</svg>

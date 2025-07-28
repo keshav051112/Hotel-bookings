@@ -37,9 +37,12 @@ import listIcon from "./listIcon.svg";
 import uploadArea from "./uploadArea.svg";
 import totalBookingIcon from "./totalBookingIcon.svg";
 import totalRevenueIcon from "./totalRevenueIcon.svg";
+import HotelStayLogo from "./hotellog.svg"
+
 
 
 export const assets = {
+    HotelStayLogo,
     logo,
     searchIcon,
     userIcon,
@@ -73,6 +76,7 @@ export const assets = {
     totalBookingIcon,
     totalRevenueIcon,
 }
+
 
 export const cities = [
     "Dubai",
