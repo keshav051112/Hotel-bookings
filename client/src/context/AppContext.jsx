@@ -41,7 +41,6 @@ const AppContextProvider = ({children})=>{
     const fetchUser = async () => {
   try {
     const token = await getToken();
-    console.log("Token from Clerk:", token);
     const res = await axios.get('/api/user', {
       headers: { Authorization: `Bearer ${token}` }
     });

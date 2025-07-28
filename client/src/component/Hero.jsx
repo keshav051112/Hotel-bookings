@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import { assets, cities } from '../assets/assets'
 import { useAppContext } from '../context/AppContext'
+import heroImage from '../assets/heroImage.png';
+import heroimg2 from '../assets/heroimg2.jpg';
+import heroimg4 from '../assets/heroimg4.jpg';
+import heroimg5 from '../assets/heroimg5.jpg';
 
-const backgroundImages = [
-  '/src/assets/heroImage.png',
-  '/src/assets/heroimg2.jpg',
-  '/src/assets/heroimg4.jpg'
-  ,'/src/assets/heroimg5.jpg'
-];
+const backgroundImages = [heroImage, heroimg2, heroimg4, heroimg5];
 
 const Hero = () => {
   const [destination, setDestination] = useState("")
